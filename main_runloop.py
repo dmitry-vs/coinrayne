@@ -1,5 +1,6 @@
 import os
 import xml.etree.ElementTree as Etree
+import requests
 
 from argparser import parse_args_main_runloop
 import binance_exchange
@@ -38,8 +39,8 @@ Buy price: {}
 Stop loss price: {}
 Take profit price: {}\n'''
 open(output_file, 'w+').close()  # create empty output file
-try:
-    while True:
+while True:
+    try:
         print('Total trades: ', trades)
         for key, val in coins.items():
             start_time = 'now - {}  UTC+3'.format(val[0])
@@ -75,6 +76,8 @@ try:
                     print(trade_info)
                     with open(output_file, 'a+') as f:
                         f.write(trade_info)
-except KeyboardInterrupt as e:
-    print('Canceled by user, exit now')
-    exit(1)
+    except KeyboardInterrupt:
+        print('Canceled by user, exit now')
+        break
+    except requests.exceptions.ReadTimeout:
+        continue
