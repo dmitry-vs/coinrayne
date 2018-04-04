@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<coins>
+	<coin ticker="AMBBTC" timedelta="10 minutes" volume="10" price="0.1" stoploss="2" takeprofit="8"/>
+	<coin ticker="POABTC" timedelta="6 hours" volume="15" price="5" stoploss="3" takeprofit="9"/>
+	<coin ticker="ETHBTC" timedelta="120 seconds" volume="5" price="20" stoploss="4" takeprofit="10"/>
+</coins>
