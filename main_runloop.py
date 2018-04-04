@@ -34,9 +34,9 @@ binance_timeframe = binance_exchange.time_frames['1m']
 # run loop while printing results to output_file
 trades = {}
 trade_info_format = '''* {} {}
-Buy price: {0:.8f}
-Stop loss price: {0:.8f}
-Take profit price: {0:.8f}\n'''
+Buy price: {}
+Stop loss price: {}
+Take profit price: {}\n'''
 open(output_file, 'w+').close()  # create empty output file
 try:
     while True:
@@ -69,8 +69,8 @@ try:
                     stoploss_price = buy_price * (100 - val[3]) / 100
                     takeprofit_price = buy_price * (100 + val[4]) / 100
                     trades[key].append(pump_candle_minutes[-1])
-                    trade_info = trade_info_format.format(dates.currenttime(), key, buy_price,
-                                                          stoploss_price, takeprofit_price)
+                    trade_info = trade_info_format.format(dates.currenttime(), key, '{0:.8f}'.format(buy_price),
+                                                          '{0:.8f}'.format(stoploss_price), '{0:.8f}'.format(takeprofit_price))
 
                     print(trade_info)
                     with open(output_file, 'a+') as f:
