@@ -32,7 +32,7 @@ print(coins)
 binance_client = binance_exchange.get_client()
 binance_timeframe = binance_exchange.time_frames['1m']
 
-# run loop while printing results to output_file
+# run loop with printing results to output file
 trades = {}
 trade_info_format = '''* {} {}
 Buy price: {}
@@ -76,8 +76,14 @@ while True:
                     print(trade_info)
                     with open(output_file, 'a+') as f:
                         f.write(trade_info)
+    except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError) as e:
+        exc_info = '* {} exception: \n{}'.format(dates.currenttime(), str(e))
+        with open(output_file, 'a+') as f:
+            f.write(exc_info)
+        print(exc_info)
+        continue
     except KeyboardInterrupt:
+        with open(output_file, 'a+') as f:
+            f.write('* {}: canceled by user'.format(dates.currenttime()))
         print('Canceled by user, exit now')
         break
-    except requests.exceptions.ReadTimeout:
-        continue
