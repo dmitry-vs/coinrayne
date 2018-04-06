@@ -76,8 +76,8 @@ while True:
                     print(trade_info)
                     with open(output_file, 'a+') as f:
                         f.write(trade_info)
-    except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError) as e:
-        exc_info = '* {} exception: \n{}'.format(dates.currenttime(), str(e))
+    except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError, binance_exchange.BinanceAPIException) as e:
+        exc_info = '* {} exception \n{}\n'.format(dates.currenttime(), str(e))
         with open(output_file, 'a+') as f:
             f.write(exc_info)
         print(exc_info)
