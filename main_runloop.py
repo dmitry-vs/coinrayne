@@ -16,21 +16,21 @@ current_time = dates.currenttime()
 output_file = 'trades_{}.txt'.format(current_time.replace(':', '_'))
 
 # read parameters from input file xml
-# coins format: {ticker: (timedelta, volume, price, stoploss, takeprofit)}
+# coins format: {ticker: (timedelta, volume, price, stoploss, takeprofit, timeframe)}
 with open(input_file, 'r') as f:
     input_xml = f.read()
 xmltree = Etree.fromstring(input_xml)
 xmlcoins = xmltree.findall('coin')
 coins = {xmlcoin.attrib['ticker']: (xmlcoin.attrib['timedelta'], float(xmlcoin.attrib['volume']),
                                     float(xmlcoin.attrib['price']), float(xmlcoin.attrib['stoploss']),
-                                    float(xmlcoin.attrib['takeprofit']))
+                                    float(xmlcoin.attrib['takeprofit']), xmlcoin.attrib['timeframe'])
          for xmlcoin in xmlcoins}
 print(coins)
 
 
 # create binance client
 binance_client = binance_exchange.get_client()
-binance_timeframe = binance_exchange.time_frames['1m']
+# binance_timeframe = binance_exchange.time_frames['1m']
 
 # run loop with printing results to output file
 trades = {}
@@ -45,7 +45,7 @@ while True:
         for key, val in coins.items():
             start_time = 'now - {}  UTC+3'.format(val[0])
             end_time = 'now UTC+3'
-            candles = binance_client.get_historical_klines(key, binance_timeframe, start_time, end_time)
+            candles = binance_client.get_historical_klines(key, val[5], start_time, end_time)
             first_candle, last_candle = candles[0], candles[-1]
             first_candle_minute = dates.fromtimestamp(first_candle[0], input_millisec=True)
             last_candle_minute = dates.fromtimestamp(last_candle[0], input_millisec=True)
